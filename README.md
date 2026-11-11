@@ -11,9 +11,6 @@
 > 家庭点单、菜谱手记、盲盒抽签、营养分析、开销账本。
 > React 前端打包进 Spring Boot 后端，最终只运行一个 **`naomale-java.jar`**。
 
-<p align="center">
-  <img src="frontend/public/images/theme-naomale/hero-banner.png" alt="闹麻了点单默认主题" width="560" />
-</p>
 
 <p align="center">
   <a href="CHANGELOG.md"><strong>查看完整更新日志 →</strong></a>
