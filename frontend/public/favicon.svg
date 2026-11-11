@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="闹麻了点单">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#b45309" />
+      <stop offset="1" stop-color="#e11d48" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#g)" />
+  <path d="M13 31h38c0 12-8.5 20-19 20S13 43 13 31Z" fill="#fff" opacity="0.95" />
+  <path d="M13 31h38" stroke="#fde68a" stroke-width="2" stroke-linecap="round" opacity="0.8" />
+  <path d="M32 24c-4.5-3.5-9-5-9-5s1.2 6 5.5 9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" opacity="0.9" />
+  <circle cx="38" cy="18" r="2.6" fill="#fff" opacity="0.9" />
+</svg>

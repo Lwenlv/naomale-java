@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="菜品图片占位">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fbf3e7"/>
+      <stop offset="0.55" stop-color="#f0e1cd"/>
+      <stop offset="1" stop-color="#e3cfb4"/>
+    </linearGradient>
+    <linearGradient id="plate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffdf8"/>
+      <stop offset="1" stop-color="#f4e8d8"/>
+    </linearGradient>
+    <linearGradient id="food" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d99a55"/>
+      <stop offset="1" stop-color="#b96f35"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <circle cx="400" cy="306" r="186" fill="#d8c1a3" opacity="0.35"/>
+  <circle cx="400" cy="300" r="168" fill="url(#plate)" stroke="#d6bfa2" stroke-width="5"/>
+  <circle cx="400" cy="300" r="126" fill="#f7ecdd" stroke="#e5d2b8" stroke-width="3"/>
+  <path d="M316 316c12 58 54 92 84 92s72-34 84-92z" fill="url(#food)"/>
+  <path d="M310 316h180" stroke="#a8652f" stroke-width="10" stroke-linecap="round"/>
+  <path d="M340 286c-18-26 16-38 0-64" fill="none" stroke="#b99a77" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  <path d="M392 280c-18-26 16-38 0-64" fill="none" stroke="#b99a77" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  <path d="M444 286c-18-26 16-38 0-64" fill="none" stroke="#b99a77" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  <g stroke="#8f6b48" stroke-width="7" stroke-linecap="round" opacity="0.75">
+    <path d="M560 250l62-58"/>
+    <path d="M576 266l62-58"/>
+  </g>
+  <text x="400" y="486" text-anchor="middle" fill="#8f6b48" font-family="'Noto Serif SC', serif" font-size="26" letter-spacing="4">暂无菜品照片</text>
+  <text x="400" y="520" text-anchor="middle" fill="#a98f72" font-family="sans-serif" font-size="16" letter-spacing="2">上传照片后可替换</text>
+</svg>

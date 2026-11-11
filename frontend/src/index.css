@@ -1,0 +1,163 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-serif: 'Noto Serif SC', 'Playfair Display', serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    
+    /* Default: 闹腾烟火 (Spice) */
+    --theme-bg: #fff7f7;
+    --theme-primary: #dc2626;
+    --theme-primary-hover: #b91c1c;
+    --theme-primary-light: #fee2e2;
+    --theme-primary-dark: #991b1b;
+    --theme-border: rgba(220, 38, 38, 0.2);
+  }
+
+  /* 1. 闹腾烟火 (Spicy Chili Red) */
+  html.theme-spice {
+    --theme-bg: #fff6f6;
+    --theme-card: #ffffff;
+    --theme-primary: #dc2626;
+    --theme-primary-hover: #b91c1c;
+    --theme-primary-light: #fee2e2;
+    --theme-primary-dark: #991b1b;
+    --theme-border: rgba(220, 38, 38, 0.2);
+
+    /* Dynamically remap amber utilities to fiery spicy palette */
+    --color-amber-50: #fff1f2;
+    --color-amber-100: #ffe4e6;
+    --color-amber-200: #fecdd3;
+    --color-amber-300: #fda4af;
+    --color-amber-400: #fb7185;
+    --color-amber-500: #f43f5e;
+    --color-amber-600: #e11d48;
+    --color-amber-700: #dc2626;
+    --color-amber-800: #b91c1c;
+    --color-amber-900: #881337;
+    --color-amber-950: #4c0519;
+  }
+
+  /* 2. 和解原木 (Warm Terracotta Oak) */
+  html.theme-wood {
+    --theme-bg: #faf5ee;
+    --theme-card: #ffffff;
+    --theme-primary: #d97706;
+    --theme-primary-hover: #b45309;
+    --theme-primary-light: #fef3c7;
+    --theme-primary-dark: #92400e;
+    --theme-border: rgba(217, 119, 6, 0.2);
+
+    /* Dynamically remap amber utilities to warm oak palette */
+    --color-amber-50: #fffbeb;
+    --color-amber-100: #fef3c7;
+    --color-amber-200: #fde68a;
+    --color-amber-300: #fcd34d;
+    --color-amber-400: #fbbf24;
+    --color-amber-500: #f59e0b;
+    --color-amber-600: #d97706;
+    --color-amber-700: #b45309;
+    --color-amber-800: #92400e;
+    --color-amber-900: #78350f;
+    --color-amber-950: #451a03;
+  }
+
+  /* 3. 别吵了绿 (Cooling Mint Sage) */
+  html.theme-sage {
+    --theme-bg: #f3f9f5;
+    --theme-card: #ffffff;
+    --theme-primary: #059669;
+    --theme-primary-hover: #047857;
+    --theme-primary-light: #d1fae5;
+    --theme-primary-dark: #065f46;
+    --theme-border: rgba(5, 150, 105, 0.2);
+
+    /* Dynamically remap amber utilities to fresh herbal emerald palette */
+    --color-amber-50: #ecfdf5;
+    --color-amber-100: #d1fae5;
+    --color-amber-200: #a7f3d0;
+    --color-amber-300: #6ee7b7;
+    --color-amber-400: #34d399;
+    --color-amber-500: #10b981;
+    --color-amber-600: #059669;
+    --color-amber-700: #047857;
+    --color-amber-800: #065f46;
+    --color-amber-900: #064e3b;
+    --color-amber-950: #022c22;
+  }
+
+  /* 4. 夜宵排档 (Midnight Stalls Neon Gold) */
+  html.theme-midnight {
+    --theme-bg: #0f1013;
+    --theme-card: #18191d;
+    --theme-primary: #f59e0b;
+    --theme-primary-hover: #d97706;
+    --theme-primary-light: #1f2228;
+    --theme-primary-dark: #fbbf24;
+    --theme-border: rgba(245, 158, 11, 0.25);
+
+    /* Dynamically remap amber utilities to glowing izakaya amber */
+    --color-amber-50: #1f2228;
+    --color-amber-100: #2a251b;
+    --color-amber-200: #453724;
+    --color-amber-300: #785a28;
+    --color-amber-400: #b48530;
+    --color-amber-500: #f59e0b;
+    --color-amber-600: #fbbf24;
+    --color-amber-700: #f59e0b;
+    --color-amber-800: #fcd34d;
+    --color-amber-900: #fef3c7;
+    --color-amber-950: #18191d;
+  }
+
+  /* 5. 自定义主题：调色板和壁纸由 applyTheme 写入内联变量 */
+  html.theme-custom .app-shell {
+    background-color: transparent !important;
+  }
+
+  html.theme-custom body {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+
+  html.theme-custom .theme-glass {
+    background-color: color-mix(in srgb, var(--theme-card) 82%, transparent);
+    backdrop-filter: blur(18px);
+  }
+}
+
+.font-serif-title {
+  font-family: 'Noto Serif SC', 'Playfair Display', serif;
+}
+
+.font-sans-body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Custom scrollbars for clean food cards and drawer */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(150, 150, 150, 0.2);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(150, 150, 150, 0.4);
+}
+
