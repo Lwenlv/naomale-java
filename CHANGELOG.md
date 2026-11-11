@@ -7,7 +7,7 @@
 <p><strong>记录闹麻了点单每一次值得被看见的变化。</strong></p>
 
 <p>
-  <img src="https://img.shields.io/badge/version-v0.5.0-e2662e?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-v0.5.1-e2662e?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/status-active-2f855a?style=flat-square" alt="status" />
   <img src="https://img.shields.io/badge/stack-Spring%20Boot%20%2B%20React-1f2937?style=flat-square" alt="stack" />
 </p>
@@ -21,11 +21,39 @@
 
 | 版本 | 日期 | 主题 |
 | :--- | :--- | :--- |
+| **v0.5.1** | 2026-11-11 | 退出登录与主图统一 |
 | **v0.5.0** | 2026-11-11 | 品牌与主题升级 |
 | v0.4.0 | 2026-11-11 | 完整营养与图片裁剪 |
 | v0.3.0 | 2026-11-11 | 账号级主题工坊 |
 | v0.2.0 | 2026-11-11 | Java 全栈版本 |
 | v0.1.0 | 2026-11-11 | 初始版本 |
+
+---
+
+## v0.5.1 · 退出登录与主图统一
+
+**2026-11-11**
+
+### 🐛 修复
+
+- 修复「账号与家庭」弹窗退出登录后前端仍停留在已登录状态的问题。
+- 统一退出登录入口：Header 账号菜单、主题菜单、系统设置和账号与家庭弹窗都走同一套状态清理逻辑。
+- 退出成功后清空家庭数据、关闭弹窗，并返回登录/初始化界面。
+
+### 🎨 优化
+
+- 登录页主图、首页主图、README 展示图和 Open Graph 分享图统一使用最新版品牌主图。
+- 移除旧的 `hero-banner.png` 和餐桌实拍备用图，避免不同位置继续出现旧主图。
+
+### 📦 升级方式
+
+替换 `release/naomale-java.jar` 后执行：
+
+```bash
+./stop.sh && ./start.sh
+```
+
+本次不涉及数据库结构变更。
 
 ---
 

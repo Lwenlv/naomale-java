@@ -118,7 +118,7 @@ export const DishGallery: React.FC<DishGalleryProps> = ({
         {heroFit === 'natural' ? (
           <div className="relative order-1 lg:order-2 bg-[#fff8ec] flex items-center justify-center">
             <img
-              src={heroImage || "/images/hero_family_dining_1794278990291.jpg"}
+              src={heroImage || "/images/theme-naomale/hero-home.png"}
               alt="闹麻了点单"
               referrerPolicy="no-referrer"
               className="w-full h-auto"
@@ -127,7 +127,7 @@ export const DishGallery: React.FC<DishGalleryProps> = ({
         ) : (
           <div className={`relative order-1 lg:order-2 h-[240px] sm:h-[300px] lg:h-auto lg:min-h-[400px] ${heroFit === 'contain' ? 'bg-[#fff8ec]' : 'bg-stone-900'}`}>
             <img
-              src={heroImage || "/images/hero_family_dining_1794278990291.jpg"}
+              src={heroImage || "/images/theme-naomale/hero-home.png"}
               alt="闹麻了点单"
               referrerPolicy="no-referrer"
               className={`absolute inset-0 w-full h-full ${heroFit === 'contain' ? 'object-contain' : 'object-cover'}`}

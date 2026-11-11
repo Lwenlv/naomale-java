@@ -11,6 +11,7 @@ import {
   Wifi,
   Settings2,
   Palette,
+  LogOut,
 } from 'lucide-react';
 import type { AppSettings, DataMeta } from '../types';
 import { fetchHealth, saveSettings, testAIConnection } from '../services/data';
@@ -24,6 +25,7 @@ interface SettingsModalProps {
   meta: DataMeta;
   onNotify: (message: string) => void;
   onOpenThemeStudio: () => void;
+  onLogout: () => void;
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
@@ -33,6 +35,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   meta,
   onNotify,
   onOpenThemeStudio,
+  onLogout,
 }) => {
   const [model, setModel] = React.useState(settings.ai.model || DEFAULT_AI_MODEL);
   const [apiKeyInput, setApiKeyInput] = React.useState('');
@@ -317,6 +320,21 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 密钥仅保存在服务端，服务端代理调用，前端只显示脱敏后的尾号。
               </p>
             </form>
+          </section>
+
+          <section className="rounded-2xl border border-rose-200/70 dark:border-rose-900/40 bg-rose-50/40 dark:bg-rose-950/20 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-bold text-stone-900 dark:text-stone-100">账号</h3>
+              <p className="text-[11px] text-stone-500 mt-0.5">退出后需要重新登录，家庭数据不会被删除。</p>
+            </div>
+            <button
+              type="button"
+              onClick={onLogout}
+              className="shrink-0 px-3.5 py-2 rounded-xl bg-white dark:bg-stone-900 border border-rose-200 dark:border-rose-900/60 text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 flex items-center justify-center gap-1.5"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              退出登录
+            </button>
           </section>
         </div>
       </div>

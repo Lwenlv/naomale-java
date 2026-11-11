@@ -58,7 +58,7 @@ export const AuthScreen: React.FC = () => {
       <div className="w-full max-w-md">
         <div className="flex flex-col items-center justify-center gap-2 mb-5">
           <img
-            src="/images/theme-naomale/hero-banner.png"
+            src="/images/theme-naomale/hero-home.png"
             alt="闹麻了点单 · 今天吃啥，别吵了"
             className="w-full max-w-md h-auto rounded-2xl shadow-sm"
           />

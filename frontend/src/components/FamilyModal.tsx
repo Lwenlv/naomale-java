@@ -17,7 +17,6 @@ import {
   fetchFamilyInvite,
   fetchFamilyMembers,
   joinFamily,
-  logoutAccount,
   switchFamily,
 } from '../services/data';
 
@@ -26,9 +25,10 @@ interface FamilyModalProps {
   onClose: () => void;
   auth: AuthState;
   onNotify: (message: string) => void;
+  onLogout: () => void;
 }
 
-export const FamilyModal: React.FC<FamilyModalProps> = ({ isOpen, onClose, auth, onNotify }) => {
+export const FamilyModal: React.FC<FamilyModalProps> = ({ isOpen, onClose, auth, onNotify, onLogout }) => {
   const [newFamilyName, setNewFamilyName] = React.useState('');
   const [inviteInput, setInviteInput] = React.useState('');
   const [inviteCode, setInviteCode] = React.useState('');
@@ -110,16 +110,8 @@ export const FamilyModal: React.FC<FamilyModalProps> = ({ isOpen, onClose, auth,
     }, '已加入家庭');
   };
 
-  const handleLogout = async () => {
-    if (!window.confirm('确认退出登录？数据不会被删除。')) return;
-    setBusy(true);
-    try {
-      await logoutAccount();
-      onClose();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-      setBusy(false);
-    }
+  const handleLogout = () => {
+    onLogout();
   };
 
   return (

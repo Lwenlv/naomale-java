@@ -18,6 +18,10 @@
 
 ## 默认主题：闹麻了
 
+<p align="center">
+  <img src="frontend/public/images/theme-naomale/hero-home.png" alt="闹麻了点单主图" width="560" />
+</p>
+
 奶油橙配色，搭配手绘菜谱、点单清单、抽签筷篓、营养餐盘和账本插画。默认主题的五个底部导航图标使用 `frontend/public/images/theme-naomale/` 下的插画；主题切换菜单里也可以随时选择「闹麻了」。
 
 主题分两类：

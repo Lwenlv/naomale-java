@@ -525,6 +525,7 @@ export default function App() {
           setIsSettingsOpen(false);
           setIsThemeStudioOpen(true);
         }}
+        onLogout={() => void handleLogout()}
       />
 
       <FamilyModal
@@ -532,6 +533,7 @@ export default function App() {
         auth={state.auth}
         onClose={() => setIsFamilyOpen(false)}
         onNotify={showToast}
+        onLogout={() => void handleLogout()}
       />
 
       <ThemeStudio

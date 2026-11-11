@@ -404,6 +404,16 @@ export const Header: React.FC<HeaderProps> = ({
                       <Settings2 className="w-3.5 h-3.5" />
                       系统设置
                     </button>
+                    <button
+                      onClick={() => {
+                        setThemeDropdownOpen(false);
+                        onLogout();
+                      }}
+                      className="w-full px-3 py-2 text-left flex items-center gap-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      退出登录
+                    </button>
                   </div>
                 </div>
               </>
