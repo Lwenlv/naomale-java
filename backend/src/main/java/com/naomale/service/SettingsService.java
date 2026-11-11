@@ -11,7 +11,6 @@ import java.util.Set;
 
 @Service
 public class SettingsService {
-    private static final Set<String> THEMES = Set.of("spice", "wood", "sage", "midnight", "custom");
     private static final Set<String> LEGACY_MODELS = Set.of(
             "deepseek-chat", "deepseek-reasoner", "deepseek-v3", "deepseek-v3.1", "deepseek-v3.2",
             "deepseek-v4-flash", "deepseek-v4-flash-vision-exp"
@@ -34,7 +33,7 @@ public class SettingsService {
             settings.setFamilyId(familyId);
             settings.setAiProvider("deepseek");
             settings.setAiModel("deepseek-flash");
-            settings.setTheme("spice");
+            settings.setTheme("naomale|naomale");
             settingsMapper.ensureDefaults(settings);
             settings = settingsMapper.findByFamilyId(familyId);
         }
@@ -68,7 +67,9 @@ public class SettingsService {
         }
         if (body.get("theme") != null) {
             String theme = Jsons.str(body.get("theme"), settings.getTheme());
-            if (THEMES.contains(theme)) settings.setTheme(theme);
+            if (theme.matches("^(naomale|spice|wood|sage|midnight|custom)(\\|(naomale|spice|wood|sage|midnight))?$")) {
+                settings.setTheme(theme);
+            }
         }
 
         settingsMapper.update(settings);

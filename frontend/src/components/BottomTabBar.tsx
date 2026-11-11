@@ -46,7 +46,7 @@ export const BottomTabBar: React.FC<BottomTabBarProps> = ({
               <div
                 className={`relative flex items-center justify-center rounded-full transition-all ${
                   iconUrl
-                    ? `w-7 h-7 ${isActive ? 'ring-2 ring-amber-500 ring-offset-2 ring-offset-[var(--theme-bg)] dark:ring-offset-stone-900' : 'opacity-70'}`
+                    ? `w-8 h-8 overflow-hidden ${isActive ? 'ring-2 ring-amber-500 ring-offset-2 ring-offset-[var(--theme-bg)] dark:ring-offset-stone-900' : 'opacity-70'}`
                     : ''
                 }`}
               >

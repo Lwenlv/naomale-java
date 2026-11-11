@@ -49,10 +49,10 @@ public class ThemeService {
 
     public String activeTheme(String userId) {
         Entities.Theme row = themeMapper.findByUserId(userId);
-        if (row == null) return "spice";
+        if (row == null) return "naomale|naomale";
         String theme = row.getActiveTheme();
-        if ("custom".equals(theme) && (row.getConfig() == null || row.getConfig().isBlank())) return "spice";
-        if (theme == null || theme.isBlank()) return "spice";
+        if (theme == null || theme.isBlank()) return "naomale|naomale";
+        if (theme.startsWith("custom") && (row.getConfig() == null || row.getConfig().isBlank())) return "naomale|naomale";
         return theme;
     }
 
@@ -70,7 +70,7 @@ public class ThemeService {
     @Transactional
     public Map<String, Object> save(String userId, String familyId, Map<String, Object> body) {
         Map<String, Object> config = sanitize(familyId, body);
-        upsert(userId, "custom", Jsons.str(config.get("name"), "自定义主题"), Jsons.write(config));
+        upsert(userId, "custom|naomale", Jsons.str(config.get("name"), "自定义主题"), Jsons.write(config));
         sseService.emitToUser(userId, "theme.updated", "自定义主题已更新");
         return config;
     }
@@ -78,15 +78,15 @@ public class ThemeService {
     @Transactional
     public void setActive(String userId, String theme) {
         String value = theme == null ? "" : theme.trim();
-        if (!Set.of("spice", "wood", "sage", "midnight", "custom").contains(value)) {
+        if (!value.matches("^(naomale|spice|wood|sage|midnight|custom)(\\|(naomale|spice|wood|sage|midnight))?$")) {
             throw AppException.badRequest("未知的主题");
         }
         Entities.Theme row = themeMapper.findByUserId(userId);
-        if ("custom".equals(value)) {
+        if (value.startsWith("custom")) {
             if (row == null || row.getConfig() == null || row.getConfig().isBlank()) {
                 throw AppException.badRequest("还没有自定义主题，请先在主题工坊创建");
             }
-            upsert(userId, "custom", row.getName(), row.getConfig());
+            upsert(userId, value, row.getName(), row.getConfig());
         } else if (row != null) {
             upsert(userId, value, row.getName(), row.getConfig());
         } else {

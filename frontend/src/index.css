@@ -7,16 +7,42 @@
     --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
     
-    /* Default: 闹腾烟火 (Spice) */
-    --theme-bg: #fff7f7;
-    --theme-primary: #dc2626;
-    --theme-primary-hover: #b91c1c;
-    --theme-primary-light: #fee2e2;
-    --theme-primary-dark: #991b1b;
-    --theme-border: rgba(220, 38, 38, 0.2);
+    /* Default: 闹麻了 (Cream Orange) */
+    --theme-bg: #fff8ec;
+    --theme-primary: #e2662e;
+    --theme-primary-hover: #c94e1d;
+    --theme-primary-light: #ffedd5;
+    --theme-primary-dark: #9a3412;
+    --theme-border: rgba(226, 102, 46, 0.22);
   }
 
-  /* 1. 闹腾烟火 (Spicy Chili Red) */
+  /* 1. 闹麻了 (Cream Orange) */
+  html.theme-naomale {
+    --theme-bg: #fff8ec;
+    --theme-card: #fffdf8;
+    --theme-nav: #fff1d6;
+    --theme-text: #3f2a20;
+    --theme-muted: #9c7c66;
+    --theme-primary: #e2662e;
+    --theme-primary-hover: #c94e1d;
+    --theme-primary-light: #ffedd5;
+    --theme-primary-dark: #9a3412;
+    --theme-border: rgba(226, 102, 46, 0.22);
+
+    --color-amber-50: #fff8eb;
+    --color-amber-100: #ffefd2;
+    --color-amber-200: #ffdfae;
+    --color-amber-300: #f8c77c;
+    --color-amber-400: #f0ad52;
+    --color-amber-500: #e78a36;
+    --color-amber-600: #d96a25;
+    --color-amber-700: #b94e1c;
+    --color-amber-800: #923b18;
+    --color-amber-900: #6f2e16;
+    --color-amber-950: #3f1a0c;
+  }
+
+  /* 2. 闹腾烟火 (Spicy Chili Red) */
   html.theme-spice {
     --theme-bg: #fff6f6;
     --theme-card: #ffffff;

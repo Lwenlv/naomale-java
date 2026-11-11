@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, CheckCircle2, Database, Loader2, RefreshCw } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Loader2, RefreshCw } from 'lucide-react';
 
 import { Header } from './components/Header';
 import { BottomTabBar } from './components/BottomTabBar';
@@ -16,7 +16,7 @@ import { AuthScreen } from './components/AuthScreen';
 import { FamilyModal } from './components/FamilyModal';
 import { ThemeStudio } from './components/ThemeStudio';
 
-import type { BootstrapPayload, Dish, MealOrder, OrderItem, ThemeType } from './types';
+import type { BootstrapPayload, ColorPalette, Dish, MealOrder, OrderItem, ThemeStyle } from './types';
 import {
   archiveCurrentOrder,
   AuthRequiredError,
@@ -37,10 +37,20 @@ import {
   updateCurrentOrder,
   type SyncStatus,
 } from './services/data';
-import { applyTheme } from './utils/theme';
+import { applyTheme, parseTheme } from './utils/theme';
 import { formatDateTime } from './utils/date';
 
 type TabId = 'gallery' | 'order' | 'random' | 'nutrition' | 'stats';
+
+const NAOMALE_NAV_ICONS = {
+  gallery: '/images/theme-naomale/nav-gallery.png',
+  order: '/images/theme-naomale/nav-order.png',
+  random: '/images/theme-naomale/nav-random.png',
+  nutrition: '/images/theme-naomale/nav-nutrition.png',
+  stats: '/images/theme-naomale/nav-stats.png',
+};
+
+const NAOMALE_HERO_IMAGE = '/images/theme-naomale/hero-home.png';
 
 const newId = (prefix: string): string =>
   `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
@@ -50,7 +60,8 @@ export default function App() {
   const [loadError, setLoadError] = React.useState<string | null>(null);
   const [authRequired, setAuthRequired] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState<TabId>('gallery');
-  const [currentTheme, setCurrentTheme] = React.useState<ThemeType>('spice');
+  const [themeStyle, setThemeStyle] = React.useState<ThemeStyle>('naomale');
+  const [colorPalette, setColorPalette] = React.useState<ColorPalette>('naomale');
   const [syncStatus, setSyncStatus] = React.useState<SyncStatus>(getSyncStatus());
   const [toastMessage, setToastMessage] = React.useState<string | null>(null);
 
@@ -77,8 +88,10 @@ export default function App() {
       const data = await initData();
       setState(data);
       setAuthRequired(false);
-      setCurrentTheme(data.settings.theme);
-      applyTheme(data.settings.theme, { custom: data.settings.customTheme, persist: false });
+      const selection = parseTheme(data.settings.theme);
+      setThemeStyle(selection.style);
+      setColorPalette(selection.palette);
+      applyTheme(selection, { custom: data.settings.customTheme, persist: false });
       if (data.meta.warnings.length > 0) {
         showToast(`⚠️ ${data.meta.warnings[0]}`);
       }
@@ -114,15 +127,31 @@ export default function App() {
   const customTheme = state?.settings.customTheme;
   React.useEffect(() => {
     if (!activeTheme) return;
-    setCurrentTheme(activeTheme);
-    applyTheme(activeTheme, { custom: customTheme, persist: false });
+    const selection = parseTheme(activeTheme);
+    setThemeStyle(selection.style);
+    setColorPalette(selection.palette);
+    applyTheme(selection, { custom: customTheme, persist: false });
   }, [activeTheme, customTheme]);
 
   /* ------------------------------ 数据操作 ------------------------------ */
 
-  const handleThemeSelect = (theme: ThemeType) => {
-    setCurrentTheme(theme);
-    applyTheme(theme, { custom: getState().settings.customTheme });
+  const applyThemeSelection = (nextStyle: ThemeStyle, nextPalette: ColorPalette) => {
+    setThemeStyle(nextStyle);
+    setColorPalette(nextPalette);
+    applyTheme({ style: nextStyle, palette: nextPalette }, { custom: getState().settings.customTheme });
+  };
+
+  const handleStyleSelect = (style: ThemeStyle) => {
+    if (style === 'custom' && !getState().settings.customTheme) {
+      setIsThemeStudioOpen(true);
+      return;
+    }
+    applyThemeSelection(style, colorPalette);
+  };
+
+  const handlePaletteSelect = (palette: ColorPalette) => {
+    if (themeStyle === 'custom') return;
+    applyThemeSelection('naomale', palette);
   };
 
   const handleQuickAdd = (dish: Dish, memberName: string = '全家') => {
@@ -286,10 +315,22 @@ export default function App() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#fff7f7] px-4">
         <div className="w-full max-w-md rounded-3xl border border-stone-200 bg-white p-8 shadow-lg text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-amber-700 to-rose-600 text-white shadow-sm">
-            {loadError ? <AlertTriangle className="h-7 w-7" /> : <Database className="h-7 w-7" />}
+          <div className="mx-auto mb-4 flex min-h-16 items-center justify-center">
+            {loadError ? (
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-amber-700 to-rose-600 text-white shadow-sm">
+                <AlertTriangle className="h-7 w-7" />
+              </div>
+            ) : (
+              <img
+                src="/images/logo-naomale.png"
+                alt="闹麻了点单"
+                className="h-16 w-auto object-contain"
+              />
+            )}
           </div>
-          <h1 className="font-serif-title text-xl font-bold text-stone-900">闹麻了点单</h1>
+          <h1 className={`font-serif-title text-xl font-bold text-stone-900 ${loadError ? '' : 'sr-only'}`}>
+            闹麻了点单
+          </h1>
           <p className="mt-1 text-xs text-stone-500">家庭餐桌管家 · 多设备实时同步</p>
 
           {loadError ? (
@@ -329,9 +370,11 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         orderItemCount={totalItemCount}
-        currentTheme={currentTheme}
+        currentStyle={themeStyle}
+        currentPalette={colorPalette}
+        onStyleSelect={handleStyleSelect}
+        onPaletteSelect={handlePaletteSelect}
         customTheme={customTheme}
-        onThemeSelect={handleThemeSelect}
         onOpenThemeStudio={() => setIsThemeStudioOpen(true)}
         onOpenSettings={() => setIsSettingsOpen(true)}
         onOpenAddDish={() => {
@@ -359,7 +402,12 @@ export default function App() {
             }}
             onStartRandomDraw={() => setActiveTab('random')}
             members={state.members}
-            heroImage={customTheme?.slots.hero || customTheme?.slots.background}
+            heroImage={
+              themeStyle === 'custom'
+                ? customTheme?.slots.hero || customTheme?.slots.background
+                : NAOMALE_HERO_IMAGE
+            }
+            heroFit={themeStyle === 'naomale' ? 'natural' : 'cover'}
           />
         )}
 
@@ -404,22 +452,24 @@ export default function App() {
         setActiveTab={setActiveTab}
         orderItemCount={totalItemCount}
         navIcons={
-          customTheme
-            ? {
-                gallery: customTheme.slots.navGallery,
-                order: customTheme.slots.navOrder,
-                random: customTheme.slots.navRandom,
-                nutrition: customTheme.slots.navNutrition,
-                stats: customTheme.slots.navStats,
-              }
-            : undefined
+          themeStyle === 'naomale'
+            ? NAOMALE_NAV_ICONS
+            : customTheme
+              ? {
+                  gallery: customTheme.slots.navGallery,
+                  order: customTheme.slots.navOrder,
+                  random: customTheme.slots.navRandom,
+                  nutrition: customTheme.slots.navNutrition,
+                  stats: customTheme.slots.navStats,
+                }
+              : undefined
         }
       />
 
       <footer className="hidden md:block mt-auto border-t border-stone-200 dark:border-stone-800 bg-white/50 dark:bg-stone-900/50 py-4 text-center text-xs text-stone-500">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="font-serif-title font-bold text-stone-800 dark:text-stone-200">闹麻了点单</span>
+            <img src="/images/logo-naomale.png" alt="闹麻了点单" className="h-5 w-auto object-contain" />
             <span>·</span>
             <span>今天吃啥别吵了 · 多设备实时同步</span>
             <span className="hidden lg:inline text-stone-400">|</span>

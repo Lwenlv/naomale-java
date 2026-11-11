@@ -1,44 +1,95 @@
-import type { CustomTheme, ThemeType } from '../types';
+import type { ColorPalette, CustomTheme, ThemeSelection, ThemeStyle } from '../types';
 import { saveTheme } from '../services/data';
 
-export interface ThemeConfig {
-  id: Exclude<ThemeType, 'custom'>;
+export interface PaletteConfig {
+  id: ColorPalette;
   name: string;
   subtitle: string;
   colorPreview: string;
   isDark: boolean;
 }
 
-export const THEMES: ThemeConfig[] = [
+export interface ThemeStyleConfig {
+  id: ThemeStyle;
+  name: string;
+  subtitle: string;
+  colorPreview: string;
+}
+
+/** 配色只负责颜色，不携带任何图片资源 */
+export const PALETTES: PaletteConfig[] = [
+  {
+    id: 'naomale',
+    name: '奶油橙',
+    subtitle: '默认配色 · 暖奶油与橙',
+    colorPreview: '#e2662e',
+    isDark: false,
+  },
   {
     id: 'spice',
     name: '闹腾烟火',
-    subtitle: '热辣生香，川湘热炒大锅气',
+    subtitle: '热辣生香',
     colorPreview: '#dc2626',
     isDark: false,
   },
   {
     id: 'wood',
     name: '和解原木',
-    subtitle: '陶土素雅，温润抚平七嘴八舌',
+    subtitle: '陶土素雅',
     colorPreview: '#d97706',
     isDark: false,
   },
   {
     id: 'sage',
     name: '别吵了绿',
-    subtitle: '清爽薄荷，给餐桌来点冷静',
+    subtitle: '清爽薄荷',
     colorPreview: '#059669',
     isDark: false,
   },
   {
     id: 'midnight',
     name: '夜宵排档',
-    subtitle: '黑金石板，越夜越闹腾的微醺',
+    subtitle: '黑金微醺',
     colorPreview: '#f59e0b',
     isDark: true,
   },
 ];
+
+/** 完整主题负责 Logo、首页主图、导航插画等视觉资产 */
+export const THEME_STYLES: ThemeStyleConfig[] = [
+  {
+    id: 'naomale',
+    name: '闹麻了',
+    subtitle: '手绘主题 · 品牌饭食插画',
+    colorPreview: '#e2662e',
+  },
+];
+
+export const DEFAULT_THEME: ThemeSelection = { style: 'naomale', palette: 'naomale' };
+
+const PALETTE_IDS = new Set<string>(PALETTES.map((palette) => palette.id));
+const STYLE_IDS = new Set<string>(['naomale', 'custom']);
+
+/** 兼容旧数据：spice/wood/sage/midnight 当时只是配色 */
+export function parseTheme(value?: string | null): ThemeSelection {
+  const raw = (value || '').trim();
+  if (!raw) return DEFAULT_THEME;
+
+  if (raw.includes('|')) {
+    const [style, palette] = raw.split('|');
+    if (STYLE_IDS.has(style) && PALETTE_IDS.has(palette)) {
+      return { style: style as ThemeStyle, palette: palette as ColorPalette };
+    }
+  }
+
+  if (raw === 'custom') return { style: 'custom', palette: 'naomale' };
+  if (PALETTE_IDS.has(raw)) return { style: 'naomale', palette: raw as ColorPalette };
+  return DEFAULT_THEME;
+}
+
+export function serializeTheme(selection: ThemeSelection): string {
+  return `${selection.style}|${selection.palette}`;
+}
 
 const CUSTOM_VARS = [
   '--theme-bg', '--theme-card', '--theme-nav', '--theme-text', '--theme-muted',
@@ -97,19 +148,19 @@ function setScale(root: HTMLElement, prefix: 'amber' | 'rose', primary: string):
 
 /**
  * 切换主题。
- * - 预设主题：应用 CSS 变量并持久化；
- * - 自定义主题：把调色板和壁纸写入 CSS 变量，持久化由主题工坊的保存接口负责。
+ * - style 决定 Logo、首页主图、导航插画等视觉资产；
+ * - palette 只决定 CSS 颜色，不会改变 style 的图片。
  */
 export const applyTheme = (
-  theme: ThemeType,
+  selection: ThemeSelection,
   options: { persist?: boolean; custom?: CustomTheme | null } = {}
 ): void => {
   const root = document.documentElement;
-  root.classList.remove('theme-spice', 'theme-wood', 'theme-cream', 'theme-sage', 'theme-midnight', 'theme-custom', 'dark');
+  root.classList.remove('theme-naomale', 'theme-spice', 'theme-wood', 'theme-cream', 'theme-sage', 'theme-midnight', 'theme-custom', 'dark');
   CUSTOM_VARS.forEach((name) => root.style.removeProperty(name));
 
   const custom = options.custom ?? null;
-  if (theme === 'custom' && custom) {
+  if (selection.style === 'custom' && custom) {
     const palette = custom.palette;
     root.classList.add('theme-custom');
     if (palette.isDark) root.classList.add('dark');
@@ -139,22 +190,22 @@ export const applyTheme = (
     document.body.style.backgroundPosition = 'center';
     document.body.style.backgroundAttachment = 'fixed';
 
-    if (options.persist !== false) void saveTheme('custom');
+    if (options.persist !== false) void saveTheme(serializeTheme(selection));
     return;
   }
 
-  // 预设主题：清掉自定义的内联变量，让 index.css 中的预设变量生效
+  // 预设配色：清掉自定义的内联变量，让 index.css 中的预设变量生效
   document.body.style.backgroundImage = 'none';
   document.body.style.backgroundColor = '';
   document.body.style.backgroundSize = '';
   document.body.style.backgroundPosition = '';
   document.body.style.backgroundAttachment = '';
 
-  const fallback: Exclude<ThemeType, 'custom'> = theme === 'custom' ? 'spice' : theme;
-  root.classList.add(`theme-${fallback}`);
-  if (fallback === 'midnight') root.classList.add('dark');
+  const palette = selection.palette;
+  root.classList.add(`theme-${palette}`);
+  if (palette === 'midnight') root.classList.add('dark');
 
   if (options.persist !== false) {
-    void saveTheme(fallback);
+    void saveTheme(serializeTheme({ style: 'naomale', palette }));
   }
 };

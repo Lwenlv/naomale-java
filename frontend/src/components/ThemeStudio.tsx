@@ -296,7 +296,7 @@ export const ThemeStudio: React.FC<ThemeStudioProps> = ({
                   {logoSrc ? (
                     <img src={logoSrc} alt="" className="w-full h-full object-cover" />
                   ) : (
-                    <Sparkles className="w-5 h-5 text-white" />
+                    <img src="/images/logo-naomale-icon.png" alt="" className="w-full h-full object-cover" />
                   )}
                 </div>
                 <div>

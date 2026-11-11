@@ -171,7 +171,7 @@ public class ViewService {
 
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("ai", ai);
-        map.put("theme", settings.getTheme() == null ? "spice" : settings.getTheme());
+        map.put("theme", settings.getTheme() == null ? "naomale|naomale" : settings.getTheme());
         return map;
     }
 

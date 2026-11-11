@@ -55,7 +55,7 @@ public class ThemeController {
     @PutMapping("/active")
     public Map<String, Object> active(@RequestBody Map<String, Object> body, HttpServletRequest request) {
         AuthContext context = context(request);
-        themeService.setActive(context.user().getId(), Jsons.str(body.get("theme"), "spice"));
+        themeService.setActive(context.user().getId(), Jsons.str(body.get("theme"), "naomale|naomale"));
         return ApiResponses.state(themeService.activeTheme(context.user().getId()),
                 bootstrapService.build(context));
     }

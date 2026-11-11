@@ -12,7 +12,10 @@ export type MealType = 'breakfast' | 'lunch' | 'dinner' | 'supper';
 
 export type OrderStatus = 'planned' | 'cooking' | 'served' | 'completed';
 
-export type ThemeType = 'spice' | 'wood' | 'sage' | 'midnight' | 'custom';
+export type ColorPalette = 'naomale' | 'spice' | 'wood' | 'sage' | 'midnight';
+export type ThemeStyle = 'naomale' | 'custom';
+export type ThemeSelection = { style: ThemeStyle; palette: ColorPalette };
+export type ThemeType = string;
 
 export type AIProvider = 'deepseek' | 'gemini';
 
@@ -127,7 +130,7 @@ export interface PublicAISettings {
 
 export interface AppSettings {
   ai: PublicAISettings;
-  theme: ThemeType;
+  theme: string;
   customTheme?: CustomTheme | null;
 }
 
@@ -256,7 +259,7 @@ export interface ExportBundle {
   currentOrder: MealOrder;
   settings: {
     ai: { provider: AIProvider; model: string; hasKey: boolean };
-    theme: ThemeType;
+    theme: string;
   };
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Flame, Loader2, Lock, ShieldCheck, User } from 'lucide-react';
+import { ArrowRight, Loader2, Lock, ShieldCheck, User } from 'lucide-react';
 import { loginAccount, registerAccount, ApiError } from '../services/data';
 
 type Mode = 'login' | 'register';
@@ -56,14 +56,13 @@ export const AuthScreen: React.FC = () => {
   return (
     <div className="min-h-screen bg-[var(--theme-bg)] font-sans-body flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
-        <div className="flex items-center justify-center gap-2.5 mb-6">
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-700 to-rose-600 flex items-center justify-center text-white shadow-sm">
-            <Flame className="w-6 h-6 text-amber-200" />
-          </div>
-          <div>
-            <h1 className="font-serif-title text-2xl font-bold text-stone-900">闹麻了点单</h1>
-            <p className="text-[11px] text-stone-500">家庭点单 · 多设备实时同步</p>
-          </div>
+        <div className="flex flex-col items-center justify-center gap-2 mb-5">
+          <img
+            src="/images/theme-naomale/hero-banner.png"
+            alt="闹麻了点单 · 今天吃啥，别吵了"
+            className="w-full max-w-md h-auto rounded-2xl shadow-sm"
+          />
+          <p className="text-[11px] tracking-wide text-stone-500">家庭点单 · 多设备实时同步</p>
         </div>
 
         <div className="bg-white rounded-3xl border border-stone-200 shadow-lg overflow-hidden">

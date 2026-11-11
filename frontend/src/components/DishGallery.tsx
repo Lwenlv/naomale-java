@@ -12,6 +12,7 @@ interface DishGalleryProps {
   onStartRandomDraw: () => void;
   members: FamilyMember[];
   heroImage?: string;
+  heroFit?: 'cover' | 'contain' | 'natural';
 }
 
 export const DishGallery: React.FC<DishGalleryProps> = ({
@@ -23,6 +24,7 @@ export const DishGallery: React.FC<DishGalleryProps> = ({
   onStartRandomDraw,
   members,
   heroImage,
+  heroFit = 'cover',
 }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [selectedCategory, setSelectedCategory] = React.useState<string>('all');
@@ -113,14 +115,25 @@ export const DishGallery: React.FC<DishGalleryProps> = ({
           </div>
         </div>
 
-        <div className="relative order-1 lg:order-2 h-[240px] sm:h-[300px] lg:h-auto lg:min-h-[400px] bg-stone-900">
-          <img
-            src={heroImage || "/images/hero_family_dining_1794278990291.jpg"}
-            alt="闹麻了点单"
-            referrerPolicy="no-referrer"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        </div>
+        {heroFit === 'natural' ? (
+          <div className="relative order-1 lg:order-2 bg-[#fff8ec] flex items-center justify-center">
+            <img
+              src={heroImage || "/images/hero_family_dining_1794278990291.jpg"}
+              alt="闹麻了点单"
+              referrerPolicy="no-referrer"
+              className="w-full h-auto"
+            />
+          </div>
+        ) : (
+          <div className={`relative order-1 lg:order-2 h-[240px] sm:h-[300px] lg:h-auto lg:min-h-[400px] ${heroFit === 'contain' ? 'bg-[#fff8ec]' : 'bg-stone-900'}`}>
+            <img
+              src={heroImage || "/images/hero_family_dining_1794278990291.jpg"}
+              alt="闹麻了点单"
+              referrerPolicy="no-referrer"
+              className={`absolute inset-0 w-full h-full ${heroFit === 'contain' ? 'object-contain' : 'object-cover'}`}
+            />
+          </div>
+        )}
       </div>
 
       {dishes.length === 0 ? (

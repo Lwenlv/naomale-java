@@ -517,7 +517,7 @@ export async function saveSettings(patch: { ai?: AISettingsPatch; theme?: ThemeT
   return data;
 }
 
-export async function saveTheme(theme: ThemeType): Promise<void> {
+export async function saveTheme(theme: string): Promise<void> {
   if (snapshot) {
     snapshot = { ...snapshot, settings: { ...snapshot.settings, theme } };
     emit();

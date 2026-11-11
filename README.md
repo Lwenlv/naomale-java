@@ -1,7 +1,32 @@
-# naomale-java
+<p align="center">
+  <img src="frontend/public/images/logo-naomale.png" alt="闹麻了点单" width="420" />
+</p>
 
-> 家庭点单、菜谱手记、盲盒抽签、营养透视、开销账本。
+<h1 align="center">闹麻了点单</h1>
+
+<p align="center">
+  今天吃啥，别吵了。
+</p>
+
+> 家庭点单、菜谱手记、盲盒抽签、营养分析、开销账本。
 > React 前端打包进 Spring Boot 后端，最终只运行一个 **`naomale-java.jar`**。
+
+<p align="center">
+  <img src="frontend/public/images/theme-naomale/hero-banner.png" alt="闹麻了点单默认主题" width="560" />
+</p>
+
+<p align="center">
+  <a href="CHANGELOG.md"><strong>查看完整更新日志 →</strong></a>
+</p>
+
+## 默认主题：闹麻了
+
+奶油橙配色，搭配手绘菜谱、点单清单、抽签筷篓、营养餐盘和账本插画。默认主题的五个底部导航图标使用 `frontend/public/images/theme-naomale/` 下的插画；主题切换菜单里也可以随时选择「闹麻了」。
+
+主题分两类：
+
+- **完整主题**：会同时改变配色、Logo、首页主图和底部导航插画，例如「闹麻了」和自定义主题；
+- **配色方案**：只改变颜色，保留当前品牌 Logo、首页主图和导航，例如「闹腾烟火」「和解原木」「别吵了绿」「夜宵排档」。
 
 ## 架构
 

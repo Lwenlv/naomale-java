@@ -1,7 +1,7 @@
 import React from 'react';
-import { Flame, Dices, Activity, BarChart3, ShoppingBag, Settings2, Palette, Plus, HardDrive, Home, ChevronDown, LogOut, Users, ImagePlus } from 'lucide-react';
-import type { AuthState, CustomTheme, ThemeType } from '../types';
-import { THEMES } from '../utils/theme';
+import { Dices, Activity, BarChart3, ShoppingBag, Settings2, Palette, Plus, HardDrive, Home, ChevronDown, LogOut, Users, ImagePlus } from 'lucide-react';
+import type { AuthState, ColorPalette, CustomTheme, ThemeStyle } from '../types';
+import { PALETTES, THEME_STYLES, type PaletteConfig, type ThemeStyleConfig } from '../utils/theme';
 import type { SyncStatus } from '../services/data';
 import { formatDateTime } from '../utils/date';
 
@@ -9,8 +9,10 @@ interface HeaderProps {
   activeTab: 'gallery' | 'order' | 'random' | 'nutrition' | 'stats';
   setActiveTab: (tab: 'gallery' | 'order' | 'random' | 'nutrition' | 'stats') => void;
   orderItemCount: number;
-  currentTheme: ThemeType;
-  onThemeSelect: (theme: ThemeType) => void;
+  currentStyle: ThemeStyle;
+  currentPalette: ColorPalette;
+  onStyleSelect: (style: ThemeStyle) => void;
+  onPaletteSelect: (palette: ColorPalette) => void;
   customTheme?: CustomTheme | null;
   onOpenThemeStudio: () => void;
   onOpenSettings: () => void;
@@ -41,8 +43,10 @@ export const Header: React.FC<HeaderProps> = ({
   activeTab,
   setActiveTab,
   orderItemCount,
-  currentTheme,
-  onThemeSelect,
+  currentStyle,
+  currentPalette,
+  onStyleSelect,
+  onPaletteSelect,
   customTheme,
   onOpenThemeStudio,
   onOpenSettings,
@@ -59,6 +63,67 @@ export const Header: React.FC<HeaderProps> = ({
   const activeFamily = auth.families.find((family) => family.id === auth.activeFamilyId);
   const familyName = activeFamily?.name ?? '我的家庭';
 
+  const renderStyleOption = (style: ThemeStyleConfig) => (
+    <button
+      key={style.id}
+      onClick={() => {
+        onStyleSelect(style.id);
+        setThemeDropdownOpen(false);
+      }}
+      className={`w-full px-3 py-2 text-left flex items-center justify-between text-xs hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors ${
+        currentStyle === style.id
+          ? 'font-bold text-amber-800 dark:text-amber-400 bg-amber-50/70 dark:bg-amber-950/40'
+          : 'text-stone-700 dark:text-stone-300'
+      }`}
+    >
+      <div className="flex items-center gap-2">
+        <span
+          className="w-3 h-3 rounded-full border border-stone-300 dark:border-stone-600 shrink-0"
+          style={{ backgroundColor: style.colorPreview }}
+        />
+        <div>
+          <div>{style.name}</div>
+          <div className="text-[10px] text-stone-400">{style.subtitle}</div>
+        </div>
+      </div>
+    </button>
+  );
+
+  const renderPaletteOption = (palette: PaletteConfig) => {
+    const disabled = currentStyle === 'custom';
+    return (
+      <button
+        key={palette.id}
+        type="button"
+        disabled={disabled}
+        onClick={() => {
+          onPaletteSelect(palette.id);
+          setThemeDropdownOpen(false);
+        }}
+        className={`w-full px-3 py-2 text-left flex items-center justify-between text-xs transition-colors ${
+          disabled
+            ? 'text-stone-400 opacity-45 cursor-not-allowed'
+            : 'hover:bg-stone-100 dark:hover:bg-stone-800'
+        } ${
+          currentPalette === palette.id && !disabled
+            ? 'font-bold text-amber-800 dark:text-amber-400 bg-amber-50/70 dark:bg-amber-950/40'
+            : 'text-stone-700 dark:text-stone-300'
+        }`}
+      >
+        <div className="flex items-center gap-2">
+          <span
+            className="w-3 h-3 rounded-full border border-stone-300 dark:border-stone-600 shrink-0"
+            style={{ backgroundColor: palette.colorPreview }}
+          />
+          <div>
+            <div>{palette.name}</div>
+            <div className="text-[10px] text-stone-400">{palette.subtitle}</div>
+          </div>
+        </div>
+      </button>
+    );
+  };
+
   return (
     <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-[var(--theme-bg)]/90 dark:bg-stone-900/90 border-b border-stone-200/80 dark:border-stone-800 transition-colors">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
@@ -66,24 +131,39 @@ export const Header: React.FC<HeaderProps> = ({
         <div
           onClick={() => setActiveTab('gallery')}
           className="cursor-pointer flex items-center gap-2 whitespace-nowrap shrink-0 group active:scale-95 transition-transform"
+          title="闹麻了点单"
         >
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-amber-700 to-rose-600 flex items-center justify-center text-white shadow-sm overflow-hidden shrink-0">
-            {customTheme?.slots.logo ? (
-              <img src={customTheme.slots.logo} alt="主题 Logo" className="w-full h-full object-cover" />
-            ) : (
-              <Flame className="w-4 h-4 sm:w-5 sm:h-5 text-amber-200 animate-pulse" />
-            )}
-          </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1">
-              <span className="font-serif-title text-base sm:text-xl font-bold tracking-tight text-stone-900 dark:text-stone-100">
-                闹麻了点单
-              </span>
-              <span className="text-[10px] px-1 py-0.2 rounded bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300 font-bold hidden sm:inline">
-                别吵了
-              </span>
-            </div>
-          </div>
+          {currentStyle === 'custom' && customTheme?.slots.logo ? (
+            <>
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-amber-700 to-rose-600 flex items-center justify-center text-white shadow-sm overflow-hidden shrink-0">
+                <img src={customTheme.slots.logo} alt="主题 Logo" className="w-full h-full object-cover" />
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1">
+                  <span className="font-serif-title text-base sm:text-xl font-bold tracking-tight text-stone-900 dark:text-stone-100">
+                    闹麻了点单
+                  </span>
+                  <span className="text-[10px] px-1 py-0.2 rounded bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300 font-bold hidden sm:inline">
+                    别吵了
+                  </span>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <img
+                src="/images/logo-naomale.png"
+                alt="闹麻了点单"
+                className="h-8 sm:h-10 w-auto object-contain"
+              />
+              <div className="hidden sm:flex flex-col justify-center leading-tight">
+                <span className="font-serif-title text-sm font-bold tracking-tight text-stone-900 dark:text-stone-100">
+                  闹麻了点单
+                </span>
+                <span className="text-[9px] text-stone-400">今天吃啥，别吵了</span>
+              </div>
+            </>
+          )}
         </div>
 
         {/* 桌面导航 */}
@@ -264,43 +344,19 @@ export const Header: React.FC<HeaderProps> = ({
             {themeDropdownOpen && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setThemeDropdownOpen(false)} />
-                <div className="absolute right-0 mt-2 w-52 rounded-2xl bg-white dark:bg-stone-900 shadow-xl border border-stone-200 dark:border-stone-800 py-2 z-50 animate-in fade-in zoom-in-95 duration-100">
+                <div className="absolute right-0 mt-2 w-60 rounded-2xl bg-white dark:bg-stone-900 shadow-xl border border-stone-200 dark:border-stone-800 py-2 z-50 animate-in fade-in zoom-in-95 duration-100">
                   <div className="px-3 py-1 text-[10px] font-semibold text-stone-400 uppercase tracking-wider">
-                    主题画卷
+                    完整主题
                   </div>
-                  {THEMES.map((theme) => (
-                    <button
-                      key={theme.id}
-                      onClick={() => {
-                        onThemeSelect(theme.id);
-                        setThemeDropdownOpen(false);
-                      }}
-                      className={`w-full px-3 py-2 text-left flex items-center justify-between text-xs hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors ${
-                        currentTheme === theme.id
-                          ? 'font-bold text-amber-800 dark:text-amber-400 bg-amber-50/70 dark:bg-amber-950/40'
-                          : 'text-stone-700 dark:text-stone-300'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span
-                          className="w-3 h-3 rounded-full border border-stone-300 dark:border-stone-600 shrink-0"
-                          style={{ backgroundColor: theme.colorPreview }}
-                        />
-                        <div>
-                          <div>{theme.name}</div>
-                          <div className="text-[10px] text-stone-400">{theme.subtitle}</div>
-                        </div>
-                      </div>
-                    </button>
-                  ))}
+                  {THEME_STYLES.map(renderStyleOption)}
                   {customTheme && (
                     <button
                       onClick={() => {
-                        onThemeSelect('custom');
+                        onStyleSelect('custom');
                         setThemeDropdownOpen(false);
                       }}
                       className={`w-full px-3 py-2 text-left flex items-center justify-between text-xs hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors ${
-                        currentTheme === 'custom'
+                        currentStyle === 'custom'
                           ? 'font-bold text-amber-800 dark:text-amber-400 bg-amber-50/70 dark:bg-amber-950/40'
                           : 'text-stone-700 dark:text-stone-300'
                       }`}
@@ -312,11 +368,21 @@ export const Header: React.FC<HeaderProps> = ({
                         />
                         <div>
                           <div>{customTheme.name || '自定义主题'}</div>
-                          <div className="text-[10px] text-stone-400">我的主题包</div>
+                          <div className="text-[10px] text-stone-400">完整主题 · 我的主题包</div>
                         </div>
                       </div>
                     </button>
                   )}
+
+                  <div className="mt-1 pt-2 border-t border-stone-100 dark:border-stone-800 px-3 py-1 text-[10px] font-semibold text-stone-400 uppercase tracking-wider">
+                    配色方案
+                  </div>
+                  {PALETTES.map(renderPaletteOption)}
+                  <div className="px-3 pt-1 text-[9px] leading-relaxed text-stone-400">
+                    {currentStyle === 'custom'
+                      ? '自定义主题使用自己的配色，切回「闹麻了」主题后可选择配色。'
+                      : '配色只改变颜色，不替换 Logo、首页主图和导航插画。'}
+                  </div>
                   <div className="mt-1 pt-1 border-t border-stone-100 dark:border-stone-800">
                     <button
                       onClick={() => {

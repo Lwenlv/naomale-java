@@ -52,7 +52,7 @@ public class FamilyService {
         settings.setAiProvider("deepseek");
         settings.setAiModel("deepseek-flash");
         settings.setDeepseekApiKey(null);
-        settings.setTheme("spice");
+        settings.setTheme("naomale|naomale");
         settingsMapper.ensureDefaults(settings);
 
         Entities.MealMember member = new Entities.MealMember();
@@ -132,7 +132,7 @@ public class FamilyService {
         settings.setFamilyId(familyId);
         settings.setAiProvider("deepseek");
         settings.setAiModel("deepseek-flash");
-        settings.setTheme("spice");
+        settings.setTheme("naomale|naomale");
         return settings;
     }
 
